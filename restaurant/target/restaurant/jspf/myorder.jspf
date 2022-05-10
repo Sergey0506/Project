@@ -1,0 +1,152 @@
+<%@ page pageEncoding="UTF-8"%>
+<%@ include file="directive/page.jspf"%>
+<%@ include file="directive/taglib.jspf"%>
+
+
+<c:if test="${not empty details}">
+	<table align="center" width="80%"  border="1">
+
+		<c:forEach items="${orderList}" var="order">
+			<c:if test="${order.order_id==details}">
+					<tr>
+						<th colspan="5"><fmt:message key="allorders_orderId"/> "${order.order_id}"</th>
+					</tr>
+					<tr>
+						<th width="64"><fmt:message key="photo"/></th>
+						<th><fmt:message key="name"/></th>
+						<th width="15%"><fmt:message key="price"/></th>
+						<th width="15%"><fmt:message key="amount"/></th>
+						<th width="15%"><fmt:message key="sum"/></th>
+					</tr>
+				<c:forEach items="${order.getOrder().entrySet()}" var="entry">
+					
+					
+					<tr>
+						<td><img src="${app}/img/menu/food${entry.getKey().id}.jpg"
+							width="64px"></td>
+						<td align="center">${entry.getKey().name}</td>
+						<td align="center">${entry.getKey().price} <fmt:message key="uah"/></td>
+						<td align="center">${entry.getValue()} <fmt:message key="pcs"/></td>
+						<td align="center">${entry.getValue()*entry.getKey().price} <fmt:message key="uah"/></td>
+					</tr>
+				</c:forEach>
+				<tr>
+					<td colspan="4" align="right"><fmt:message key="allorders_orderSum"/></td>
+					<td align="center">${order.sum} <fmt:message key="uah"/></td>
+				</tr>
+				<c:if test="${order.status=='Доставка'}">
+					<tr>
+						<td colspan="5" align="right">
+							<form action="${app}/controller" style="margin-top: 10px;"
+								method="post">
+								<input type="hidden" name="command" value="pay" /> <input
+									type="hidden" name="id" value=${details } />
+								<button type="submit"><fmt:message key="allorders_pay"/></button>
+							</form>
+						</td>
+					</tr>
+
+				</c:if>
+			</c:if>
+		</c:forEach>
+
+	</table>
+	<hr />
+</c:if>
+<div style="margin-left: 10%">
+	<button
+		onclick="window.location.href = '${app}/controller?command=menu&button=myOrder';"><fmt:message key="actualOrders"/></button>
+	<button
+		onclick="window.location.href = '${app}/controller?command=menu&button=myOrder&type=archive';"><fmt:message key="archive"/></button>
+</div>
+
+<c:if test="${empty archive}">
+	<table align="center" width="80%" cellpadding="7" border="1">
+		<tr>
+			<th colspan="5"><fmt:message key="actualOrders"/></th>
+		</tr>
+		<tr>
+			<th><fmt:message key="allorders_orderId"/></th>
+			<th><fmt:message key="sum"/></th>
+			<th width="15%"><fmt:message key="allorders_orderStatus"/></th>
+			<th width="15%"><fmt:message key="allorders_orderDetails"/></th>
+		</tr>
+		<c:if test="${empty orderList}">
+			<tr>
+				<td colspan="5" align="center"><fmt:message key="allorders_haveNoOrders"/></td>
+			</tr>
+		</c:if>
+		<c:if test="${not empty orderList}">
+			<c:forEach items="${orderList}" var="order">
+				<c:if test="${order.status!='Оплачен' && order.status!='Завершен'}">
+					<c:set var="noEmpty" value="1" />
+					<tr>
+						<td align="center">${order.order_id}</td>
+						<td align="center">${order.sum} <fmt:message key="uah"/></td>
+						<td align="center">${order.status}</td>
+						<td align="center">
+							<form action="${app}/controller" method="post">
+								<input type="hidden" name="command" value="details" /> <input
+									type="hidden" name="id" value="${order.order_id}" />
+								<button type="submit"><fmt:message key="allorders_orderDetails"/></button>
+
+
+							</form>
+							<c:if test="${order.status=='Доставка'}">
+							<p style="color:red;"><fmt:message key="allorders_payOrder"/></p>
+							</c:if>
+						</td>
+					</tr>
+				</c:if>
+			</c:forEach>
+		</c:if>
+		<c:if test="${noEmpty!=1 && not empty orderList}">
+			<tr>
+				<td colspan="4" align="center"><fmt:message key="allorders_noActualOrders"/></td>
+			</tr>
+		</c:if>
+	</table>
+</c:if>
+<c:if test="${not empty archive}">
+	<table align="center" width="80%" cellpadding="7" border="1">
+		<tr>
+			<th colspan="5"><fmt:message key="allorders_ordersInArchive"/></th>
+		</tr>
+		<tr>
+			<th><fmt:message key="allorders_orderId"/></th>
+			<th><fmt:message key="sum"/></th>
+			<th width="15%"><fmt:message key="allorders_orderDetails"/></th>
+		</tr>
+		<c:if test="${empty orderList}">
+			<tr>
+				<td colspan="5" align="center"><fmt:message key="allorders_haveNoOrders"/></td>
+			</tr>
+		</c:if>
+		<c:if test="${not empty orderList}">
+			<c:forEach items="${orderList}" var="order">
+				<c:if test="${order.status=='Оплачен' || order.status=='Завершен'}">
+					<c:set var="noEmpty" value="1" />
+					<tr>
+						<td align="center">${order.order_id}</td>
+						<td align="center">${order.sum} <fmt:message key="uah"/></td>
+						<td align="center">
+							<form action="${app}/controller" method="post">
+								<input type="hidden" name="command" value="details" /> <input
+									type="hidden" name="id" value="${order.order_id}" />
+								<button type="submit"><fmt:message key="allorders_orderDetails"/></button>
+
+
+							</form>
+						</td>
+					</tr>
+				</c:if>
+			</c:forEach>
+		</c:if>
+		<c:if test="${noEmpty!=1 && not empty orderList}">
+			<tr>
+				<td colspan="4" align="center"><fmt:message key="allorders_noOrdersInArchive"/></td>
+			</tr>
+		</c:if>
+	</table>
+</c:if>
+<c:remove var="details" />

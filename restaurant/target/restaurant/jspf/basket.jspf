@@ -1,0 +1,57 @@
+<%@ page pageEncoding="UTF-8"%>
+<%@ include file="directive/page.jspf" %>
+<%@ include file="directive/taglib.jspf" %>
+
+<h2 align="center"><fmt:message key="basket"/></h2>
+<table align="center" width="80%"  border="1">
+			<tr>
+				<th width="64"><fmt:message key="photo"/></th>
+				<th><fmt:message key="name"/></th>
+				<th width="15%"><fmt:message key="price"/></th>
+				<th width="15%"><fmt:message key="amount"/></th>
+				<th width="15%"><fmt:message key="sum"/></th>
+			</tr>
+			<c:if test="${empty basket}">
+				<tr>
+					<td colspan="5" align="center"><fmt:message key="basket_basketIsEmpty"/></td>
+				</tr>
+			</c:if>
+			<c:if test="${not empty basket}">
+				<c:forEach items="${basket.getBasket().entrySet()}" var="entry">
+
+					<tr>
+						<td><img src="${app}/img/menu/food${entry.getKey().id}.jpg"
+							width="64px"></td>
+						<td align="center">${entry.getKey().name}</td>
+						<td align="center">${entry.getKey().price} <fmt:message key="uah"/></td>
+						<td align="center">${entry.getValue()} <fmt:message key="pcs"/></td>
+						<td align="center">${entry.getValue()*entry.getKey().price} <fmt:message key="uah"/>
+							<form action="${app}/controller" style="margin-top: 10px;"
+								method="post">
+								<input type="hidden" name="command" value="frombasket" />
+								<input type="hidden" name="id" value="${entry.getKey().id}" /> 
+								<input type="number" style="text-align: center;" step="1" min="1"
+									max="${entry.getValue()}" name="number" value="1">
+								<button type="submit">
+									<fmt:message key="delete" />
+								</button>
+							</form>
+						</td>
+					</tr>
+				</c:forEach>
+				<tr>
+					<td colspan="4" align="right"><fmt:message key="basket_orderSum"/></td>
+					<td align="center">${basket.sum} <fmt:message key="uah"/>
+					</td>
+				</tr>
+				<tr>
+					<td colspan="5" align="right">
+						<form action="${app}/controller" style="margin-top: 10px;"
+							method="post">
+							<input type="hidden" name="command" value="doOrder" />
+							<button type="submit"><fmt:message key="basket_doOrder"/></button>
+						</form>
+					</td>
+				</tr>
+			</c:if>
+		</table>

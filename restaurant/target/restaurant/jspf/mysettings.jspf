@@ -1,0 +1,108 @@
+<%@ page pageEncoding="UTF-8"%>
+<%@ include file="directive/page.jspf"%>
+<%@ include file="directive/taglib.jspf"%>
+
+<script type="text/javascript">
+	window.onload = function() {
+		document.getElementById("newPassword").onchange = validatePassword;
+		document.getElementById("confirm").onchange = validatePassword;
+	}
+	function validatePassword() {
+		var pass2 = document.getElementById("confirm").value;
+		var pass1 = document.getElementById("newPassword").value;
+		if (pass1 != pass2)
+			document.getElementById("confirm").setCustomValidity(
+					'<fmt:message key="validation_match"/>');
+		else
+			document.getElementById("confirm").setCustomValidity('');
+		//empty string means no validation error
+	}
+</script>
+
+<div
+	style="display: flex; justify-content: center; margin-left: 10%; width: 80%">
+
+	<table>
+		<tr style="height: 40px;">
+			<td><fmt:message key="settings_locale" />:</td>
+			<td>
+				<form action="${app}/controller" method="post">
+					<input type="hidden" name="command" value="updateSettings" /> <select
+						name="loc">
+						<c:forEach var="localeName" items="${locales}">
+							<option
+								<c:if test="${localeName==user.locale}">
+								selected
+								</c:if>
+								value="${localeName}">${localeName}</option>
+						</c:forEach>
+					</select> <input type="submit" value='<fmt:message key="change"/>'>
+				</form>
+			</td>
+		</tr>
+		<tr>
+			<td colspan="2"><hr /></td>
+		</tr>
+		<tr>
+			<td><fmt:message key="settings_changePass" />:</td>
+			<td align="right">
+				<form action="${app}/controller" method="post">
+					<input type="hidden" name="command" value="updateSettings" /> <input
+						type="password" pattern="^([a-zA-Z0-9]{4,10}$)"
+						title='<fmt:message key="validation_validPass"/>'
+						style="text-align: center;"
+						placeholder='<fmt:message key="validation_oldPass"/>' required
+						Id="oldPassword" name="oldPassword"></br> <input
+						type="password" pattern="^([a-zA-Z0-9]{4,10}$)"
+						title='<fmt:message key="validation_validPass"/>'
+						style="text-align: center;"
+						placeholder='<fmt:message key="validation_newPass"/>' required
+						Id="newPassword" name="newPassword"></br> <input
+						type="password" style="text-align: center;"
+						placeholder='<fmt:message key="validation_confirmPass"/>' required
+						Id="confirm" name="confirm"></br> <input type="submit"
+						value='<fmt:message key="change"/>'>
+				</form>
+			</td>
+
+		</tr>
+
+		<c:if test="${user.role=='manager'}">
+			<tr>
+				<td colspan="2"><hr /></td>
+			</tr>
+			<tr>
+				<td><fmt:message key="settings_changeRole"/>:</td>
+				<td>
+					<form action="${app}/controller" method="post">
+					<input type="hidden" name="command" value="updateSettings" /> <input type="text"
+						pattern="^([a-zA-Z0-9]{4,10}$)"
+						title='<fmt:message key="validation_validPass"/>'
+						style="text-align: center;"
+						placeholder='<fmt:message key="validation_login"/>' required
+						name="login">
+						<select name="role">
+							<option value="manager" selected>Manager</option>
+							<option value="user" >User</option>						
+						</select>
+						
+						<input type="submit"
+						value='<fmt:message key="change"/>'>
+				</form>
+				</td>
+			</tr>
+		</c:if>
+		
+			<tr>
+			<td colspan="2" align="center">
+				<my:errorTag msg="${error}"/>
+				<my:infoTag msg="${info}"/>
+			</td>
+		</tr>
+
+	</table>
+
+	<c:remove var="error" />
+	<c:remove var="info" />
+
+</div>
