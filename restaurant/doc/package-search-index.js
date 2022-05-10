@@ -1,0 +1,1 @@
+packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"l":"com.restaurant.command"},{"l":"com.restaurant.controller"},{"l":"com.restaurant.dao.entity"},{"l":"com.restaurant.dao.mysql"},{"l":"com.restaurant.filter"},{"l":"com.restaurant.listener"},{"l":"com.restaurant.servlet"},{"l":"com.restaurant.tags"}];updateSearchResults();
