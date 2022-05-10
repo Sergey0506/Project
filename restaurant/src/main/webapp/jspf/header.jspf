@@ -1,0 +1,115 @@
+<%@ page pageEncoding="UTF-8"%>
+<%@ include file="directive/page.jspf"%>
+<%@ include file="directive/taglib.jspf"%>
+
+
+<div
+		style="display: flex; justify-content: center; margin-left: 10%; width: 85%">
+		
+		<div style="height: 100%; width: 50%">
+			<my:dateTag/>
+			<c:set var="current" value="${page-1}" />
+			<c:if test="${empty user}">
+				<br>
+				<button onclick="window.location.href = '${app}/login';"><fmt:message key="enter"/></button>
+				<button onclick="window.location.href = '${app}/registration';"><fmt:message key="registration"/></button>
+				<br>
+			</c:if>
+			<c:if test="${not empty user}">
+				<fmt:message key="login_as"/><c:out value=" ${user.login}    " />
+				<br>
+				<button
+					onclick="window.location.href = '${app}/index';"><fmt:message key="menu"/></button>
+				<c:if test="${user.role=='user'}">
+					<button
+						onclick="window.location.href = '${app}/controller?command=menu&button=basket';"><fmt:message key="basket"/></button>
+					<button
+						onclick="window.location.href = '${app}/controller?command=menu&button=myOrder';"><fmt:message key="myOrders"/></button>
+					
+				</c:if>
+				<c:if test="${user.role=='manager'}">
+					<button
+						onclick="window.location.href = '${app}/controller?command=menu&button=allOrders';"><fmt:message key="allOrders"/></button>
+					<button
+						onclick="window.location.href = '${app}/controller?command=menu&button=addFood';"><fmt:message key="addToMenu"/></button>
+				</c:if>
+				<button
+						onclick="window.location.href = '${app}/controller?command=menu&button=mySettings';"><fmt:message key="settings"/></button>
+				<button
+					onclick="window.location.href = '${app}/controller?command=logout';"><fmt:message key="exit"/></button>
+				<br>
+				<c:if test="${not empty basket && user.role=='user'}">
+					<fmt:message key='in_basket'/><c:out value=" ${basket.count} "/><fmt:message key='on_amount'/> <c:out value="${basket.sum}"/> <fmt:message key='uah'/> 
+				</c:if>
+
+			</c:if>
+
+			<br>
+			<c:if test="${not empty show.get('main')}">
+				<table>
+					<tr>
+						<c:forEach var="i" begin="1" end="${menu.size()}">
+
+							<td>
+								<form action="${app}/controller" method="post">
+									<input type="hidden" name="command" value="pagination" /> <input
+										type="hidden" name="page" value="${i}" />
+									<button type="submit">${i}</button>
+								</form>
+							</td>
+						</c:forEach>
+					</tr>
+				</table>
+			</c:if>
+		</div>
+		<div style="height: 100%; width: 50%;">
+			<c:if test="${not empty show.get('main')}">
+				<form action="${app}/controller" method="post">
+					<input type="hidden" name="command" value="search" />
+					<table>
+						<tr>
+							<td rowspan="3"><label for="sortBy"><fmt:message key="sort_by"/></label><br>
+								<input type="radio" name="sortBy" id="radios2-0" value="name"
+								${form.get("name")}> <label for="radios2-0"><fmt:message key="sort_byName"/></label>
+								<br> <input type="radio" name="sortBy" id="radios2-1"
+								value="price" ${form.get("price")}> <label
+								for="radios2-1"><fmt:message key="sort_byPrice"/></label></td>
+
+							<td rowspan="3"><label for="sortType"></label><br> <input
+								type="radio" name="sortType" id="radios1-0" value="ASC"
+								${form.get("ASC")}> <label for="radios1-0"><fmt:message key="sort_AZ"/></label> <br> <input type="radio" name="sortType"
+								id="radios1-1" value="DESC" ${form.get("DESC")}> <label
+								for="radios1-1"><fmt:message key="sort_ZA"/></label></td>
+
+							<td align="right"><label for="searchType"><fmt:message key="sort_show"/></label> <br><select
+								name="searchType">
+
+									<option ${form.get("full")} value="full">Всё меню</option>
+									<c:forEach items="${category}" var="cat">
+										<option ${form.get(cat)} value="${cat}">${cat}</option>
+									</c:forEach>
+
+							</select></td>
+						</tr>
+						<tr>
+							<td align="right"><label for="onPage"><fmt:message key="sort_onPage"/>
+								</label> <select name="onPage">
+									<option ${form.get("5")} value="5">5</option>
+									<option ${form.get("10")} value="10">10</option>
+									<option ${form.get("15")} value="15">15</option>
+									<option ${form.get("20")} value="20">20</option>
+									<option ${form.get("25")} value="25">25</option>
+							</select></td>
+						</tr>
+						<tr>
+							<td align="center">
+								<button type="submit"><fmt:message key="sort_search"/></button>
+							</td>
+						</tr>
+					</table>
+				</form>
+
+			</c:if>
+		</div>
+
+	</div>

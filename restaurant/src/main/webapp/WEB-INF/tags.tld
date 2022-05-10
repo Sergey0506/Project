@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<taglib 
+	version="2.0" xmlns="http://java.sun.com/xml/j2ee" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee/web-jsptaglibrary_2_0.xsd">
+	<tlib-version>1.0</tlib-version>
+	<jsp-version>2.0</jsp-version>
+	<short-name>MyTags</short-name>
+	<uri>http://my.tags</uri>
+	
+	<tag>
+		<name>dateTag</name>
+		<tag-class>com.restaurant.tags.DateTag</tag-class>	
+	</tag>
+	<tag>
+		<name>errorTag</name>
+		<tag-class>com.restaurant.tags.ErrorTag</tag-class>	
+		
+		<attribute>
+			<name>msg</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+	</tag>
+	<tag>
+		<name>infoTag</name>
+		<tag-class>com.restaurant.tags.InfoTag</tag-class>	
+		
+		<attribute>
+			<name>msg</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+	</tag>
+	
+</taglib>

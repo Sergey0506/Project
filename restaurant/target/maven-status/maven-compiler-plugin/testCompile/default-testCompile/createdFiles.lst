@@ -1,0 +1,15 @@
+com\restaurant\command\UpdateSettingsCommandTest.class
+com\restaurant\dao\mysql\MysqlFoodDAOTest.class
+com\restaurant\command\StatusCommandTest.class
+com\restaurant\controller\ControllerTest.class
+com\restaurant\command\AddFoodCommandTest.class
+com\restaurant\command\FromBasketCommandTest.class
+com\restaurant\command\EditFoodCommandTest.class
+com\restaurant\command\RegistrationCommandTest.class
+com\restaurant\command\DoOrderCommandTest.class
+com\restaurant\command\LoginCommandTest.class
+com\restaurant\command\LogoutCommandTest.class
+com\restaurant\command\MenuCommandTest.class
+com\restaurant\command\ToBasketCommandTest.class
+com\restaurant\command\DetailsCommandTest.class
+com\restaurant\command\PayCommandTest.class
